@@ -58,7 +58,28 @@ cb_success <- function(name = NULL) {
   cat("\n")
   cat("\n")
   
-} # cb_intro()
+} # cb_success()
+
+cb_race_cup <- function(name = NULL) {
+  
+  txt <- paste0(
+    "....YYYYYYYYYYY....", "\n",
+    ".....YYYYYYYYY.....", "\n",
+    "......YYYYYYY......", "\n",
+    ".......YYYYY.......", "\n",
+    "........YYY........", "\n",
+    ".........Y.........", "\n",
+    ".........Y.........", "\n",
+    ".......YYYYY.......", "\n")
+  
+  cat("\n\n")
+  sprite_show(txt)
+  cat("  Your Race Cup!")
+  cat("\n")
+  cat("\n")
+  
+} # cb_race_cup()
+
 
 cb_show_color <- function(color)  {
 
@@ -71,9 +92,13 @@ cb_show_color <- function(color)  {
   
 } # cb_show_color()
 
-cb_select_colors <- function(name = NULL) {
+cb_select_colors <- function(colors = NA, name = NULL) {
 
-  colors <- readline(prompt = "How many colors (2-5) ? ")
+  # input colors
+  if (is.na(colors)) {
+    colors <- readline(prompt = "How many colors (2-5) ? ")
+  }
+  
   colors <- suppressWarnings(as.integer(colors))
   
   if (is.na(colors) | colors < 2 | colors > 5) {
@@ -83,6 +108,8 @@ cb_select_colors <- function(name = NULL) {
   
   color_list <- NULL
   
+  
+  # show available colors
   cat("\n")
   cat("Colors: ")
   if (colors >= 2) {
@@ -111,6 +138,7 @@ cb_select_colors <- function(name = NULL) {
     color_list <- c(color_list, "M")
   }
 
+  # return values
   color_count <- colors
   color_chars <- paste(color_list, collapse = "")
   
@@ -256,23 +284,22 @@ cb_input_code <- function(step = 1, code_length = 4, color_list = c("R", "B"))  
   
 }
 
-codebreaker <- function(sound = TRUE, name = NULL)  {
+cb_play_game <- function(colors = NA, sound = TRUE, name = NULL) {
 
-  cb_intro()
-  if (sound) {beep("fanfare")}
-  setup <- cb_select_colors()
-
+  setup <- cb_select_colors(colors)
+  
   cat("\n")
   cat("The code consists of 4 letters/colors (e.g. B R R B)\n")
   cat("Try to find it! (Enter exit to stop)\n")
-
+  
   secret_code <- sample(setup$color_list, 4, replace = TRUE)
   secret_code <- paste(secret_code, collapse = "") 
   #cat("Secret code =",secret_code)
-
+  
   try = 1
   game_over <- FALSE
-    
+  game_success <- FALSE
+  
   while(!game_over) {
     
     code <- cb_input_code(try, 4, setup$color_list)
@@ -280,6 +307,7 @@ codebreaker <- function(sound = TRUE, name = NULL)  {
     if (code == "EXIT") {
       cat("\n")
       cat("Game stopped!")
+      game_success <- FALSE
       break
     }
     
@@ -291,14 +319,80 @@ codebreaker <- function(sound = TRUE, name = NULL)  {
     
     if (correct$all >= 4)  {
       game_over <- TRUE
+      game_success <- TRUE
       cb_success()
       if (sound) {beep("mario")}
     } else {
       try <- try + 1
     }
-
+    
   } # while
   
+  return(list(try = try, game_success = game_success))
+  
+} # cp_play_game()
+
+
+codebreaker <- function(sound = TRUE, name = NULL)  {
+
+  cb_intro()
+  if (sound) {beep("fanfare")}
+ 
+  game_mode <- readline(prompt = "(s)ingle game or (r)ace? ")
+  game_mode <- toupper(game_mode)
+  
+  if (game_mode == "S") {game_mode <- "single"}
+  if (game_mode == "R") {game_mode <- "race"}
+  if (!game_mode %in% c("single", "race")) {game_mode <- "single"}
+
+  if (game_mode == "single") {    
+
+    result <- cb_play_game(colors = NA, sound = sound, name = name)
+    
+  } else {
+    
+    stage <- 1
+    try_total <- 0
+    colors_start <- 2
+    colors_end <- 5
+    game_stop <- FALSE
+ 
+    for (i in colors_start:colors_end) {
+      
+      cat("\n")
+      cat(bg_cyan(paste("Race: Stage", stage, "->", i, "colors          ")))
+      cat("\n")
+      
+      result <- cb_play_game(colors = i, sound = sound, name = name)
+      if (result$game_success == FALSE) {
+        game_stop <- TRUE
+        break
+        }
+      try_total <- try_total + result$try
+      stage <- stage + 1
+      
+      Sys.sleep(2)
+      
+      if (i < colors_end)  {
+        cat("Get ready for the next code!")
+        cat("\n")
+      }
+    } # for
+    
+    
+    if (!game_stop)  {
+      cat("You mastered the race!\n")
+      Sys.sleep(2)
+      cat("Total Try:", try_total,"\n")
+      
+      Sys.sleep(2)
+      cb_race_cup()
+      beep("treasure")
+      
+    } # if !game_stop
+    
+  } # if single/race
+
 } # codebreaker()
 
 codebreaker(sound = TRUE)
