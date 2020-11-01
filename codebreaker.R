@@ -190,6 +190,11 @@ cb_clean_code <- function(code, code_length = 4)  {
 
   # Upper Case
   code <- toupper(code)
+  
+  # check if empty
+  if (code == "") {
+    code <- "XXXX"
+  }
 
   # check if EXIT
   if (code == "EXIT")  {
@@ -205,6 +210,11 @@ cb_clean_code <- function(code, code_length = 4)  {
     }
   }  
 
+  # add X
+  code_clean <- paste0(code_clean, 
+                       paste(rep("X", code_length), collapse = ""))
+                                         
+  # limit length to code_length                                       
   code_clean <- substr(code_clean, 1, code_length)
   
   return(code_clean)
