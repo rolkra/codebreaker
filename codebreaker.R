@@ -360,7 +360,7 @@ codebreaker <- function(sound = TRUE, name = NULL)  {
     for (i in colors_start:colors_end) {
       
       cat("\n")
-      cat(bg_cyan(paste("Race: Stage", stage, "->", i, "colors          ")))
+      cat(bg_cyan(paste("Race: Round", stage, "->", i, "colors          ")))
       cat("\n")
       
       result <- cb_play_game(colors = i, sound = sound, name = name)
