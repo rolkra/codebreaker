@@ -350,7 +350,6 @@ cb_input_code <- function(step = 1, code_length = 4, color_list = c("R", "B"))  
 #' @param colors Colors that can be used in game
 #' @param sound Play sounds?
 #' @param name Player name
-#' @import beepr
 #' @return list
 
 cb_play_game <- function(colors = NA, sound = TRUE, name = NULL) {
@@ -384,13 +383,13 @@ cb_play_game <- function(colors = NA, sound = TRUE, name = NULL) {
     cat(col_silver("correct:"), correct$all)
     cat(col_silver(" (color only:"),correct$color)
     cat(col_silver(")"))
-    if (sound) {beep("ping")}
+    if (sound) {beepr::beep("ping")}
     
     if (correct$all >= 4)  {
       game_over <- TRUE
       game_success <- TRUE
       cb_success()
-      if (sound) {beep("mario")}
+      if (sound) {beepr::beep("mario")}
     } else {
       try <- try + 1
     }
@@ -405,7 +404,6 @@ cb_play_game <- function(colors = NA, sound = TRUE, name = NULL) {
 #'
 #' @param sound Play sounds?
 #' @param name Name of player
-#' @import beepr
 #' @return list  
 #' @export
 #' @examples
@@ -416,7 +414,7 @@ cb_play_game <- function(colors = NA, sound = TRUE, name = NULL) {
 codebreaker <- function(sound = TRUE, name = NULL)  {
 
   cb_intro()
-  if (sound) {beep("fanfare")}
+  if (sound) {beepr::beep("fanfare")}
  
   game_mode <- readline(prompt = "(S)ingle game or (R)ace? ")
   game_mode <- toupper(game_mode)
@@ -466,7 +464,7 @@ codebreaker <- function(sound = TRUE, name = NULL)  {
       
       Sys.sleep(2)
       cb_race_cup()
-      beep("treasure")
+      beepr::beep("treasure")
       
     } # if !game_stop
     
