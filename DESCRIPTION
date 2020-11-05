@@ -1,13 +1,12 @@
 Package: codebreaker
-Title: Retro Logic Game: Use Logic to Break the Code
+Title: Retro Logic Game
 Version: 0.0.1
 Authors@R: 
     person(given = "Roland",
            family = "Krasser",
            role = c("aut", "cre"),
-           email = "roland.krasser@gmail.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: Logic game in the style of the early 1980s homecomputers.
+           email = "roland.krasser@gmail.com")
+Description: Logic game in the style of the early 1980s homecomputers. Can you break the code?
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
@@ -15,3 +14,5 @@ URL: http://github.com/rolkra/codebreaker
 Imports: beepr, cli
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
+Suggests: 
+    testthat
