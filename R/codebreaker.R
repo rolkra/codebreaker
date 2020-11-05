@@ -1,5 +1,8 @@
-library(cli)
-library(beepr)
+#' Print sprite in console
+#'
+#' @param txt Text string containing sprite definition
+#' @import cli
+#' @return Prints sprite in console 
 
 sprite_show <- function(txt)  {
   for (i in 1:nchar(txt)) {
@@ -17,6 +20,11 @@ sprite_show <- function(txt)  {
   }   
 } # sprite_show() 
 
+
+#' Show Code Breaker Intro 
+#'
+#' @param name Player name
+#' @return Prints sprite in console 
 
 cb_intro <- function(name = NULL) {
   
@@ -43,6 +51,12 @@ cb_intro <- function(name = NULL) {
   
 } # cb_intro()
 
+
+#' Show Code Breaker Success 
+#'
+#' @param name Player name
+#' @return Prints sprite in console 
+
 cb_success <- function(name = NULL) {
   
   txt <- paste0(
@@ -59,6 +73,12 @@ cb_success <- function(name = NULL) {
   cat("\n")
   
 } # cb_success()
+
+
+#' Show Code Breaker Race Cup 
+#'
+#' @param name Player name
+#' @return Prints sprite in console 
 
 cb_race_cup <- function(name = NULL) {
   
@@ -81,6 +101,12 @@ cb_race_cup <- function(name = NULL) {
 } # cb_race_cup()
 
 
+#' Show color in console 
+#'
+#' @param color Color
+#' @import cli
+#' @return Prints color in console 
+
 cb_show_color <- function(color)  {
 
   if (color == "R") { cat(bg_red(" R ")) }
@@ -91,6 +117,13 @@ cb_show_color <- function(color)  {
   if (color == "X") { cat(" X ") }
   
 } # cb_show_color()
+
+
+#' Selct Colors 
+#'
+#' @param colors Selected colors
+#' @param name Player name
+#' @return Print selected colors in console 
 
 cb_select_colors <- function(colors = NA, name = NULL) {
 
@@ -147,6 +180,12 @@ cb_select_colors <- function(colors = NA, name = NULL) {
               color_list = color_list))  
 }
 
+
+#' Convert code into a vector
+#'
+#' @param code Code
+#' @return vector 
+
 cb_code2vector <- function(code) {
   
   code_vector <- strsplit(code, split="",fixed = TRUE)[[1]]
@@ -156,11 +195,17 @@ cb_code2vector <- function(code) {
 } # cb_code2vector()
 
 
+#' Check code if correct 
+#'
+#' @param code_check Code to check
+#' @param code_secret Secret code
+#' @return list  
+
 cb_check_code <- function(code_check, code_secret)  {
 
   # code empty?
   if (nchar(code_check) == 0) {
-    return(0)
+    return(list(all = 0, color = 0))
   }
     
   # check for correct position + color
@@ -175,9 +220,6 @@ cb_check_code <- function(code_check, code_secret)  {
       check_correct <- check_correct + 1
     }
   }
-  
-  #pattern_check
-  #pattern_secret
   
   # check for correct color
   
@@ -208,6 +250,12 @@ cb_check_code <- function(code_check, code_secret)  {
       
   return(list(all = check_correct, color = check_color))
 }
+
+#' Clean code 
+#'
+#' @param code Code
+#' @param code_length Length of code
+#' @return clean code  
 
 cb_clean_code <- function(code, code_length = 4)  {
 
@@ -248,6 +296,11 @@ cb_clean_code <- function(code, code_length = 4)  {
   return(code_clean)
 }
 
+#' Show code in console 
+#'
+#' @param code Code
+#' @return Console output  
+
 cb_show_code <- function(code) {
   
   if (is.vector(code)) {
@@ -263,6 +316,14 @@ cb_show_code <- function(code) {
   }  
   
 } 
+
+#' Input code 
+#'
+#' @param step Step
+#' @param code_length Length of code
+#' @param color_list List of available colors
+#' @import cli
+#' @return code  
 
 cb_input_code <- function(step = 1, code_length = 4, color_list = c("R", "B"))  {
   
@@ -283,6 +344,14 @@ cb_input_code <- function(step = 1, code_length = 4, color_list = c("R", "B"))  
   return(code)
   
 }
+
+#' Play a code breaker game 
+#'
+#' @param colors Colors that can be used in game
+#' @param sound Play sounds?
+#' @param name Player name
+#' @import beepr
+#' @return list
 
 cb_play_game <- function(colors = NA, sound = TRUE, name = NULL) {
 
@@ -332,13 +401,24 @@ cb_play_game <- function(colors = NA, sound = TRUE, name = NULL) {
   
 } # cp_play_game()
 
-
+#' Play codebreaker game 
+#'
+#' @param sound Play sounds?
+#' @param name Name of player
+#' @import beepr
+#' @return list  
+#' @export
+#' @examples
+#' ## Start game (in interactive R sessions)
+#' if (interactive())  {
+#'    codebreaker()
+#' }
 codebreaker <- function(sound = TRUE, name = NULL)  {
 
   cb_intro()
   if (sound) {beep("fanfare")}
  
-  game_mode <- readline(prompt = "(s)ingle game or (r)ace? ")
+  game_mode <- readline(prompt = "(S)ingle game or (R)ace? ")
   game_mode <- toupper(game_mode)
   
   if (game_mode == "S") {game_mode <- "single"}
@@ -378,8 +458,7 @@ codebreaker <- function(sound = TRUE, name = NULL)  {
         cat("\n")
       }
     } # for
-    
-    
+
     if (!game_stop)  {
       cat("You mastered the race!\n")
       Sys.sleep(2)
@@ -394,5 +473,3 @@ codebreaker <- function(sound = TRUE, name = NULL)  {
   } # if single/race
 
 } # codebreaker()
-
-codebreaker(sound = TRUE)
