@@ -6,7 +6,10 @@ Authors@R:
            family = "Krasser",
            role = c("aut", "cre"),
            email = "roland.krasser@gmail.com")
-Description: Logic game in the style of the early 1980s homecomputers. Can you break the code?
+Description: Logic game in the style of the early 1980s homecomputers 
+    that can be played in the R console. This game is inspired by 
+    Mastermind, a game that became popular in the 1970s.
+    Can you break the code?
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
