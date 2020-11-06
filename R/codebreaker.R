@@ -451,14 +451,14 @@ codebreaker <- function(sound = TRUE, name = NULL)  {
   cb_intro()
   if (sound) {beepr::beep("fanfare")}
  
-  game_mode <- readline(prompt = "(S)ingle game, (R)ace or (E)xtreme ? ")
+  game_mode <- readline(prompt = "(S)ingle game, (R)ace or (X)treme ? ")
   game_mode <- toupper(game_mode)
   
   if (game_mode == "S") {game_mode <- "single"}
   if (game_mode == "R") {game_mode <- "race"}
-  if (game_mode == "E") {game_mode <- "extreme"}
+  if (game_mode == "X") {game_mode <- "xtreme"}
   
-  if (!game_mode %in% c("single", "race", "extreme")) {
+  if (!game_mode %in% c("single", "race", "xtreme")) {
     game_mode <- "single"
   }
 
@@ -469,7 +469,7 @@ codebreaker <- function(sound = TRUE, name = NULL)  {
   } else {
   
     # empty for codemaker allowed?
-    if (game_mode == "extreme") {
+    if (game_mode == "xtreme") {
       empty <- TRUE
     } else {
       empty <- FALSE
