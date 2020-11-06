@@ -4,10 +4,12 @@
 \alias{cb_select_colors}
 \title{Selct Colors}
 \usage{
-cb_select_colors(colors = NA, name = NULL)
+cb_select_colors(colors = NA, empty = FALSE, name = NULL)
 }
 \arguments{
 \item{colors}{Selected colors}
+
+\item{empty}{Empty code digit in secret code allowed?}
 
 \item{name}{Player name}
 }

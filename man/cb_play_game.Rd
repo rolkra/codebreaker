@@ -4,10 +4,12 @@
 \alias{cb_play_game}
 \title{Play a code breaker game}
 \usage{
-cb_play_game(colors = NA, sound = TRUE, name = NULL)
+cb_play_game(colors = NA, empty = FALSE, sound = TRUE, name = NULL)
 }
 \arguments{
 \item{colors}{Colors that can be used in game}
+
+\item{empty}{Empty code digit in secret code allowed?}
 
 \item{sound}{Play sounds?}
 
