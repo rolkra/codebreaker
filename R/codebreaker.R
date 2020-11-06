@@ -122,10 +122,11 @@ cb_show_color <- function(color)  {
 #' Selct Colors 
 #'
 #' @param colors Selected colors
+#' @param empty Empty code digit in secret code allowed?
 #' @param name Player name
 #' @return Print selected colors in console 
 
-cb_select_colors <- function(colors = NA, name = NULL) {
+cb_select_colors <- function(colors = NA, empty = FALSE, name = NULL) {
 
   # input colors
   if (is.na(colors)) {
@@ -170,11 +171,23 @@ cb_select_colors <- function(colors = NA, name = NULL) {
     cat("agenta ")
     color_list <- c(color_list, "M")
   }
+  if (empty) {
+    cat(bg_black(" X "))
+    cat("")
+  }
 
   # return values
   color_count <- colors
   color_chars <- paste(color_list, collapse = "")
-  
+
+  # add X if empty == TRUE
+  if (empty) {
+    color_count <- color_count + 1
+    color_chars <- paste0(color_chars, "X")
+    color_list <- c(color_list, "X")
+  }
+    
+  # return
   return(list(color_count = color_count, 
               color_chars = color_chars, 
               color_list = color_list))  
@@ -214,7 +227,10 @@ cb_check_code <- function(code_check, code_secret)  {
   
   check_correct <- 0
   for (i in 1:nchar(code_check))  {
-    if (substr(code_check,i,i) == substr(code_secret,i,i)) {
+    char_check <- substr(code_check,i,i)
+    char_secret <- substr(code_secret,i,i)
+    
+    if (char_check != "X" & char_check == char_secret ) {
       pattern_check[i] <- "."
       pattern_secret[i] <- "."
       check_correct <- check_correct + 1
@@ -326,13 +342,22 @@ cb_show_code <- function(code) {
 #' @return code  
 
 cb_input_code <- function(step = 1, code_length = 4, color_list = c("R", "B"))  {
-  
+
+  # prompt
   prompt <- paste0("Your code (you can use ",
-                   paste(color_list, collapse=" "),
-                    " X) : ")
+                   paste(color_list, collapse=" "))
+  
+  if ("X" %in% color_list) {
+    prompt <- paste0(prompt, ") : ")
+  } else {
+    prompt <- paste0(prompt, " X) : ")
+  }
+          
+  # input code          
   code <- readline(prompt = prompt)
   code <- cb_clean_code(code, code_length)
   
+  # check for EXIT
   if (code != "EXIT") {
   
     cat(col_silver("Try"), ifelse(step<10, paste0("0",step),step))
@@ -341,6 +366,7 @@ cb_input_code <- function(step = 1, code_length = 4, color_list = c("R", "B"))  
 
   } # if
   
+  # return code
   return(code)
   
 }
@@ -348,21 +374,28 @@ cb_input_code <- function(step = 1, code_length = 4, color_list = c("R", "B"))  
 #' Play a code breaker game 
 #'
 #' @param colors Colors that can be used in game
+#' @param empty Empty code digit in secret code allowed?
 #' @param sound Play sounds?
 #' @param name Player name
 #' @return list
 
-cb_play_game <- function(colors = NA, sound = TRUE, name = NULL) {
+cb_play_game <- function(colors = NA, empty = FALSE, sound = TRUE, name = NULL) {
 
-  setup <- cb_select_colors(colors)
-  
+  # select colors
+  setup <- cb_select_colors(colors, empty)
+
+  # info
   cat("\n")
   cat("The code consists of 4 letters/colors (e.g. B R R B)\n")
-  cat("Try to find it! (Enter exit to stop)\n")
+  if (empty) {cat("Digits of the code may be empty (X)\n")}
+  cat("Try to break it! (Enter exit to stop)\n")
   
+  # codemaker
   secret_code <- sample(setup$color_list, 4, replace = TRUE)
   secret_code <- paste(secret_code, collapse = "") 
-  #cat("Secret code =",secret_code)
+
+  # secret code must contain at least 1 color
+  if (secret_code == "XXXX") {secret_code <- "XXXB"}
   
   try = 1
   game_over <- FALSE
@@ -379,13 +412,15 @@ cb_play_game <- function(colors = NA, sound = TRUE, name = NULL) {
       break
     }
     
+    # check if correct
     correct <- cb_check_code(code, secret_code)
     cat(col_silver("correct:"), correct$all)
     cat(col_silver(" (color only:"),correct$color)
     cat(col_silver(")"))
     if (sound) {beepr::beep("ping")}
-    
-    if (correct$all >= 4)  {
+ 
+    # success?
+    if (code == secret_code) {
       game_over <- TRUE
       game_success <- TRUE
       cb_success()
@@ -416,32 +451,45 @@ codebreaker <- function(sound = TRUE, name = NULL)  {
   cb_intro()
   if (sound) {beepr::beep("fanfare")}
  
-  game_mode <- readline(prompt = "(S)ingle game or (R)ace? ")
+  game_mode <- readline(prompt = "(S)ingle game, (R)ace or (E)xtreme ? ")
   game_mode <- toupper(game_mode)
   
   if (game_mode == "S") {game_mode <- "single"}
   if (game_mode == "R") {game_mode <- "race"}
-  if (!game_mode %in% c("single", "race")) {game_mode <- "single"}
+  if (game_mode == "E") {game_mode <- "extreme"}
+  
+  if (!game_mode %in% c("single", "race", "extreme")) {
+    game_mode <- "single"
+  }
 
   if (game_mode == "single") {    
 
     result <- cb_play_game(colors = NA, sound = sound, name = name)
     
   } else {
+  
+    # empty for codemaker allowed?
+    if (game_mode == "extreme") {
+      empty <- TRUE
+    } else {
+      empty <- FALSE
+    }  
     
+    # start settings
     stage <- 1
     try_total <- 0
     colors_start <- 2
     colors_end <- 5
     game_stop <- FALSE
  
+    # game loop
     for (i in colors_start:colors_end) {
       
       cat("\n")
       cat(bg_cyan(paste("Race: Round", stage, "->", i, "colors          ")))
       cat("\n")
       
-      result <- cb_play_game(colors = i, sound = sound, name = name)
+      result <- cb_play_game(colors = i, empty <- empty, sound = sound, name = name)
       if (result$game_success == FALSE) {
         game_stop <- TRUE
         break

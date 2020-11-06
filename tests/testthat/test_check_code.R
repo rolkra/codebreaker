@@ -12,5 +12,9 @@ test_that("cb_check_code() checks code", {
 
   expect_equal(codebreaker:::cb_check_code("RBGX", "RBGY"), list(all=3,color=0))
   expect_equal(codebreaker:::cb_check_code("XXXX", "RBGY"), list(all=0,color=0))
+
+  expect_equal(codebreaker:::cb_check_code("RXXB", "RXXR"), list(all=1,color=0))
+  expect_equal(codebreaker:::cb_check_code("RXXB", "RXBX"), list(all=1,color=1))
+  expect_equal(codebreaker:::cb_check_code("RXXB", "RXBB"), list(all=2,color=0))
   
 })
