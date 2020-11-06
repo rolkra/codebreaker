@@ -14,7 +14,7 @@ You are a codebreaker and play against the computer who is the codemaker. The co
 ### Single Game
 
 Choose the number of colors the computer can use to randomly create the code.
-Then try to break!
+Then try to break it!
 
 ### Race
 
