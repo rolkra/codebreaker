@@ -1,6 +1,6 @@
 Package: codebreaker
 Title: Retro Logic Game
-Version: 0.0.2
+Version: 1.0
 Authors@R: 
     person(given = "Roland",
            family = "Krasser",

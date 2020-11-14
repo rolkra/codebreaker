@@ -1,5 +1,9 @@
 # codebreaker
 
+[![CRAN Version](http://www.r-pkg.org/badges/version/codebreaker)](https://cran.r-project.org/package=codebreaker)
+[![Downloads](http://cranlogs.r-pkg.org/badges/codebreaker)](https://cran.r-project.org/package=codebreaker)
+[![Total Downloads](http://cranlogs.r-pkg.org/badges/grand-total/codebreaker)](https://cran.r-project.org/package=codebreaker)
+
 Logic game written in R (in the style of the early 1980s home computer games)
 
 
