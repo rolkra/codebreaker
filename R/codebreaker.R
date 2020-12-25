@@ -5,7 +5,7 @@
 #' @return Prints sprite in console 
 
 sprite_show <- function(txt)  {
-  for (i in 1:nchar(txt)) {
+  for (i in seq_len(nchar(txt))) {
     char <- substr(txt, i, i)
     if(char == "R") {cat(bg_red(" "))}
     if(char == "B") {cat(bg_blue(" "))}

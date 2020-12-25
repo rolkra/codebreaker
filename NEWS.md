@@ -1,3 +1,7 @@
+# codebreaker 1.0.0
+
+* Fixes
+
 # codebreaker 0.0.2
 
 * Fix misspelled words in DESCRIPTION
