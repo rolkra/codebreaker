@@ -1,6 +1,6 @@
 Package: codebreaker
 Title: Retro Logic Game
-Version: 1.0
+Version: 1.0.1
 Authors@R: 
     person(given = "Roland",
            family = "Krasser",
@@ -12,7 +12,6 @@ Description: Logic game in the style of the early 1980s home computers
     Can you break the code?
 License: GPL-3
 Encoding: UTF-8
-LazyData: true
 URL: https://github.com/rolkra/codebreaker
 Imports: beepr, cli
 Roxygen: list(markdown = TRUE)
